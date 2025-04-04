@@ -1,9 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar servicios de Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(); // para que funcione swagger
+
+builder.Services.AddControllers(); // añadir los controladores
+
+builder.Services.AddScoped<EmailReaderService>();
 var app = builder.Build();
 
 // Configurar Swagger en entorno de desarrollo
@@ -18,6 +21,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers(); // Mapea? los controladores
 
 var summaries = new[]
 {
