@@ -14,12 +14,7 @@ public class EmailReaderService
     public EmailReaderService()
     {
         Env.Load();
-        password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
-
-        if (string.IsNullOrEmpty(password))
-        {
-            throw new InvalidOperationException("Error en el archivo .env");
-        }
+        password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
     }
     public List<string> Get()
     {
