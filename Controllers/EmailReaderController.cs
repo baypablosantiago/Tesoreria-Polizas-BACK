@@ -14,7 +14,7 @@ public class EmailReaderController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var result = _service.Test();
+        var result = _service.Get();
         return Ok(result);
     }
 }

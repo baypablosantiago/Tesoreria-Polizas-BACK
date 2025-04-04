@@ -21,7 +21,7 @@ public class EmailReaderService
             throw new InvalidOperationException("Error en el archivo .env");
         }
     }
-    public List<string> Test()
+    public List<string> Get()
     {
         List<string> emailsInfo = new List<string>();
 
