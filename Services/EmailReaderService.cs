@@ -2,14 +2,25 @@ using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
 using MimeKit;
+using DotNetEnv;
 
 public class EmailReaderService
 {
     private readonly string host = "mail.entrerios.gov.ar";
     private readonly int port = 993;
     private readonly string username = "pbay@entrerios.gov.ar";
-    private readonly string password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD"); // Usar variable de entorno
+    private readonly string password;
 
+    public EmailReaderService()
+    {
+        Env.Load();
+        password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+
+        if (string.IsNullOrEmpty(password))
+        {
+            throw new InvalidOperationException("Error en el archivo .env");
+        }
+    }
     public List<string> Test()
     {
         List<string> emailsInfo = new List<string>();
