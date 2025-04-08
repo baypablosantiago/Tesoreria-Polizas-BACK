@@ -8,17 +8,22 @@ public class EmailReaderService
 {
     private readonly string host = "mail.entrerios.gov.ar";
     private readonly int port = 993;
-    private readonly string username = "pbay@entrerios.gov.ar";
+    private readonly string username;
     private readonly string password;
 
     public EmailReaderService()
     {
         Env.Load();
-        password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
+        password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
+        username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
     }
     public List<string> Get()
     {
         List<string> emailsInfo = new List<string>();
+
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string saveDir = Path.Combine(desktopPath, "Emails");
+        Directory.CreateDirectory(saveDir);
 
         using (var client = new ImapClient())
         {
@@ -40,7 +45,7 @@ public class EmailReaderService
                 {
                     if (attachment is MimePart part && part.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
                     {
-                        string filePath = Path.Combine("c:\\Users\\tepablob\\Downloads", part.FileName);
+                        string filePath = Path.Combine(saveDir, part.FileName);                        
                         using (var stream = File.Create(filePath))
                         {
                             part.Content.DecodeTo(stream);
