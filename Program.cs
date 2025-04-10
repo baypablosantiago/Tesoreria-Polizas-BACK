@@ -1,5 +1,14 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => //el temita de los cors
+{
+    options.AddPolicy("AllowLocalhost4200", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // para que funcione swagger
@@ -8,7 +17,7 @@ builder.Services.AddControllers(); // añadir los controladores
 
 builder.Services.AddScoped<EmailReaderService>();
 var app = builder.Build();
-
+app.UseCors("AllowLocalhost4200"); //cors temario
 // Configurar Swagger en entorno de desarrollo
 if (app.Environment.IsDevelopment())
 {
