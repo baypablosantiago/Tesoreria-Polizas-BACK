@@ -15,7 +15,9 @@ builder.Services.AddSwaggerGen(); // para que funcione swagger
 
 builder.Services.AddControllers(); // añadir los controladores
 
-builder.Services.AddScoped<EmailReaderService>();
+builder.Services.AddScoped<EmailRetriverService>();
+builder.Services.AddScoped<EmailScannerService>();
+
 var app = builder.Build();
 app.UseCors("AllowLocalhost4200"); //cors temario
 // Configurar Swagger en entorno de desarrollo

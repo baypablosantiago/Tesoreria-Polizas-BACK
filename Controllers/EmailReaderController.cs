@@ -4,17 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class EmailReaderController : ControllerBase
 {
-    private readonly EmailReaderService _service;
+    private readonly EmailRetriverService _retriverService;
+    private readonly EmailScannerService _scannerService;
 
-    public EmailReaderController(EmailReaderService service)
+    public EmailReaderController(EmailRetriverService retriverServiceservice, EmailScannerService scannerService)
     {
-        _service = service;
+        _retriverService = retriverServiceservice;
+        _scannerService = scannerService;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        var result = _service.Get();
+        var result = _scannerService.GetAndJson();
         return Ok(result);
     }
 }

@@ -4,26 +4,26 @@ using MailKit.Search;
 using MimeKit;
 using DotNetEnv;
 
-public class EmailReaderService
+public class EmailScannerService
 {
     private readonly string host = "mail.entrerios.gov.ar";
     private readonly int port = 993;
     private readonly string username;
     private readonly string password;
 
-    public EmailReaderService()
+    ScannerPDF scannerPDF;
+
+    public EmailScannerService()
     {
         Env.Load();
         password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
         username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
+        scannerPDF = new ScannerPDF();
     }
-    public List<string> Get()
+
+    public List<string> GetAndJson()
     {
         List<string> emailsInfo = new List<string>();
-
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string saveDir = Path.Combine(desktopPath, "Emails");
-        Directory.CreateDirectory(saveDir);
 
         using (var client = new ImapClient())
         {
@@ -45,19 +45,17 @@ public class EmailReaderService
                 {
                     if (attachment is MimePart part && part.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
                     {
-                        string filePath = Path.Combine(saveDir, part.FileName);                        
-                        using (var stream = File.Create(filePath))
+                        using (var memoryStream = new MemoryStream())
                         {
-                            part.Content.DecodeTo(stream);
+                            part.Content.DecodeTo(memoryStream);
+                            string json = scannerPDF.ReadPdf(memoryStream);
+                            emailsInfo.Add($"Contenido del PDF: {json}");
                         }
-                        emailsInfo.Add($"PDF descargado: {filePath}");
                     }
                 }
             }
-
             client.Disconnect(true);
         }
-
         return emailsInfo;
     }
 }
