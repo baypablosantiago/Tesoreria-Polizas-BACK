@@ -1,7 +1,7 @@
 public class PolicyModel
 {
     public string Number { get; set; }
-    public string ReceiptDate { get; set; }
+    public string Reception { get; set; }
     public string Concept { get; set; }
     public string CompanyName { get; set; }
     public string CompanyCuil { get; set; }

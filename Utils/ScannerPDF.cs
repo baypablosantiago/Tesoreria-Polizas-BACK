@@ -43,7 +43,7 @@ public class ScannerPDF
     {
         var model = new PolicyModel();
         model.Number = ExtractBetween(fullText, "Póliza:", "Instituto").Trim();
-        model.ReceiptDate = DateTime.Today.ToShortDateString();
+        model.Reception = DateTime.Today.ToShortDateString().Trim();
         model.Concept = ExtractBetween(fullText, "OBJETO DE LA LICITACION O EL CONTRATO", "El presente seguro regira").Trim();
         model.CompanyName = ExtractBetween(fullText, "que resulte adeudarle", "30-").Trim();
         model.CompanyCuil = ExtractBetween(fullText, model.CompanyName, "con domicilio").Trim();
