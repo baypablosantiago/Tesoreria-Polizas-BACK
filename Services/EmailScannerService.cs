@@ -21,9 +21,10 @@ public class EmailScannerService
         scannerPDF = new ScannerPDF();
     }
 
-    public List<string> GetAndJson()
+    public List<PolicyModel> Get()
     {
-        List<string> emailsInfo = new List<string>();
+        List<PolicyModel> models = new List<PolicyModel>();
+        PolicyModel model = new PolicyModel();
 
         using (var client = new ImapClient())
         {
@@ -34,12 +35,10 @@ public class EmailScannerService
             inbox.Open(FolderAccess.ReadOnly);
 
             var uids = inbox.Search(SearchQuery.NotSeen);
-            emailsInfo.Add($"Correos no leídos: {uids.Count}");
 
             foreach (var uid in uids)
             {
                 var message = inbox.GetMessage(uid);
-                emailsInfo.Add($"Asunto: {message.Subject}");
 
                 foreach (var attachment in message.Attachments)
                 {
@@ -48,14 +47,14 @@ public class EmailScannerService
                         using (var memoryStream = new MemoryStream())
                         {
                             part.Content.DecodeTo(memoryStream);
-                            string json = scannerPDF.ReadPdf(memoryStream);
-                            emailsInfo.Add($"Contenido del PDF: {json}");
+                            model = scannerPDF.ReadPdf(memoryStream);
+                            models.Add(model);
                         }
                     }
                 }
             }
             client.Disconnect(true);
         }
-        return emailsInfo;
+        return models;
     }
 }

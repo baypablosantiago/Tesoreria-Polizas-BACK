@@ -16,7 +16,7 @@ public class EmailReaderController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var result = _scannerService.GetAndJson();
+        var result = _scannerService.Get();
         return Ok(result);
     }
 }
