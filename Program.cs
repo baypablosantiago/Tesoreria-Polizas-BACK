@@ -22,6 +22,7 @@ builder.Services.AddControllers(); // añadir los controladores
 
 builder.Services.AddScoped<EmailRetriverService>();
 builder.Services.AddScoped<EmailScannerService>();
+builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
 
 var app = builder.Build();
 

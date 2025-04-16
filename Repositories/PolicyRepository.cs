@@ -1,4 +1,4 @@
-
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 public interface IPolicyRepository
 {
@@ -20,8 +20,10 @@ public class PolicyRepository : IPolicyRepository
         throw new NotImplementedException();
     }
 
-    public Task<PolicyModel> Insert(PolicyModel policy)
+    public async Task<PolicyModel> Insert(PolicyModel policy)
     {
-        throw new NotImplementedException();
+        EntityEntry<PolicyModel> insertedPolicy = await _context.Policies.AddAsync(policy);
+        await _context.SaveChangesAsync();
+        return insertedPolicy.Entity;
     }
 }
