@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => //el temita de los cors
@@ -10,6 +12,9 @@ builder.Services.AddCors(options => //el temita de los cors
     });
 });
 
+builder.Services.AddDbContext<TesoContext>(options 
+=> options.UseMySQL(builder.Configuration.GetConnectionString(name:"XAMPP")));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // para que funcione swagger
 
@@ -19,6 +24,13 @@ builder.Services.AddScoped<EmailRetriverService>();
 builder.Services.AddScoped<EmailScannerService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    TesoContext context = scope.ServiceProvider.GetRequiredService<TesoContext>();
+    context.Database.EnsureCreated();
+}
+
 app.UseCors("AllowLocalhost4200"); //cors temario
 // Configurar Swagger en entorno de desarrollo
 if (app.Environment.IsDevelopment())
