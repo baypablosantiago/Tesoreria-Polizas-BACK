@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/emailreader")]
+[Route("api/policy")]
 [ApiController]
-public class EmailReaderController : ControllerBase
+public class PolicyController : ControllerBase
 {
     private readonly IPolicyRepository _policyRepository;
-    private readonly EmailRetriverService _retriverService;
     private readonly EmailScannerService _scannerService;
 
-    public EmailReaderController(EmailRetriverService retriverServiceservice, EmailScannerService scannerService, IPolicyRepository policyRepository)
+    public PolicyController(EmailRetriverService retriverServiceservice, EmailScannerService scannerService, IPolicyRepository policyRepository)
     {
-        _retriverService = retriverServiceservice;
         _scannerService = scannerService;
         _policyRepository = policyRepository;
     }

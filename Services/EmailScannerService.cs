@@ -10,18 +10,19 @@ public class EmailScannerService
     private readonly int port = 993;
     private readonly string username;
     private readonly string password;
-
     ScannerPDF scannerPDF;
+    private readonly IPolicyRepository _policyRepository;
 
-    public EmailScannerService()
+    public EmailScannerService(IPolicyRepository policyRepository)
     {
+        _policyRepository = policyRepository;
         Env.Load();
         password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
         username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
         scannerPDF = new ScannerPDF();
     }
 
-    public List<PolicyModel> Get()
+    public async Task<List<PolicyModel>> GetAsync()
     {
         List<PolicyModel> models = new List<PolicyModel>();
         PolicyModel model = new PolicyModel();
@@ -32,7 +33,7 @@ public class EmailScannerService
             client.Authenticate(username, password);
 
             var inbox = client.Inbox;
-            inbox.Open(FolderAccess.ReadOnly);
+            inbox.Open(FolderAccess.ReadWrite);
 
             var uids = inbox.Search(SearchQuery.NotSeen);
 
@@ -48,10 +49,16 @@ public class EmailScannerService
                         {
                             part.Content.DecodeTo(memoryStream);
                             model = scannerPDF.ReadPdf(memoryStream);
-                            models.Add(model);
+                            var exists = await _policyRepository.GetByNumber(model.Number);
+                            if (exists == null)
+                            {
+                                models.Add(model);
+                            }
+                            else{Console.WriteLine("Se intento cargar una poliza duplicada.");}
                         }
                     }
                 }
+                inbox.AddFlags(uid, MessageFlags.Seen, true);
             }
             client.Disconnect(true);
         }
