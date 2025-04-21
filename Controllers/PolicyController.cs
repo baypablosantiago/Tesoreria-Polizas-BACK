@@ -5,25 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 public class PolicyController : ControllerBase
 {
     private readonly IPolicyRepository _policyRepository;
-    private readonly EmailScannerService _scannerService;
 
-    public PolicyController(EmailRetriverService retriverServiceservice, EmailScannerService scannerService, IPolicyRepository policyRepository)
+    public PolicyController(IPolicyRepository policyRepository)
     {
-        _scannerService = scannerService;
         _policyRepository = policyRepository;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAll()
     {
-        var result = await _scannerService.GetAsync(); 
-
-        foreach (PolicyModel a in result)
-        {
-            await _policyRepository.Insert(a); 
-        }
+        var result = _policyRepository.GetAll();
 
         return Ok(result);
     }
-
 }

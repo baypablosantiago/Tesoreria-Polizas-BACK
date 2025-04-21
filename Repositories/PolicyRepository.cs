@@ -5,6 +5,7 @@ public interface IPolicyRepository
 {
     Task<PolicyModel> Insert(PolicyModel policy);
     Task<PolicyModel?> GetByNumber(string number);
+    Task<List<PolicyModel>> GetAll();
 }
 
 public class PolicyRepository : IPolicyRepository
@@ -21,6 +22,10 @@ public class PolicyRepository : IPolicyRepository
         return await _context.Policies.FirstOrDefaultAsync(p => p.Number == number);
     }
 
+    public async Task<List<PolicyModel>> GetAll()
+    {
+        return await _context.Policies.ToListAsync();
+    }
 
     public async Task<PolicyModel> Insert(PolicyModel policy)
     {
