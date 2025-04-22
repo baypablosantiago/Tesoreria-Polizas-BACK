@@ -12,9 +12,9 @@ public class PolicyController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
-        var result = _policyRepository.GetAll();
+        var result = await _policyRepository.GetAll();
 
         return Ok(result);
     }

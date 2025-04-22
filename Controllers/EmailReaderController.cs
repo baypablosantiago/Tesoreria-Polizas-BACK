@@ -5,12 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 public class EmailReaderController : ControllerBase
 {
     private readonly IPolicyRepository _policyRepository;
-    private readonly EmailRetriverService _retriverService;
     private readonly EmailScannerService _scannerService;
 
-    public EmailReaderController(EmailRetriverService retriverServiceservice, EmailScannerService scannerService, IPolicyRepository policyRepository)
+    public EmailReaderController(EmailScannerService scannerService, IPolicyRepository policyRepository)
     {
-        _retriverService = retriverServiceservice;
         _scannerService = scannerService;
         _policyRepository = policyRepository;
     }

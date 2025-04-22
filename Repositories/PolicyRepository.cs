@@ -24,7 +24,7 @@ public class PolicyRepository : IPolicyRepository
 
     public async Task<List<PolicyModel>> GetAll()
     {
-        return await _context.Policies.ToListAsync();
+        return await _context.Policies.Include(p => p.States).ToListAsync();
     }
 
     public async Task<PolicyModel> Insert(PolicyModel policy)
