@@ -22,8 +22,6 @@ public class ScannerPDF
             sb.Append(" ").Append(text.Replace("\n", " ").Replace("\r", " "));
 
             fullText = sb.ToString().Trim();
-            Console.WriteLine(fullText);
-
         }
         return ParsePolicyFromText(fullText);
     }

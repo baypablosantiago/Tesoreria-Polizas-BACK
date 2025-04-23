@@ -6,7 +6,7 @@ using DotNetEnv;
 
 public class EmailScannerService
 {
-    private readonly string host = "mail.entrerios.gov.ar";
+    private readonly string host;
     private readonly int port = 993;
     private readonly string username;
     private readonly string password;
@@ -15,8 +15,9 @@ public class EmailScannerService
 
     public EmailScannerService(IPolicyRepository policyRepository)
     {
-        _policyRepository = policyRepository;
         Env.Load();
+        _policyRepository = policyRepository;
+        host = Environment.GetEnvironmentVariable("HOST") ?? throw new InvalidOperationException("Error en el .env");
         password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
         username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
         scannerPDF = new ScannerPDF();
@@ -54,7 +55,6 @@ public class EmailScannerService
                             {
                                 models.Add(model);
                             }
-                            else{Console.WriteLine("Se intento cargar una poliza duplicada.");}
                         }
                     }
                 }
