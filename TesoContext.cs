@@ -14,4 +14,12 @@ public class TesoContext : DbContext
     {
 
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<State>()
+        .HasKey(ps => new { ps.PolicyNumber, ps.Name });
+
+    base.OnModelCreating(modelBuilder);
+}
 }

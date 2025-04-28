@@ -51,12 +51,12 @@ public class ScannerPDF
         model.Insurer = ExtractBetween(fullText, "Productor:", "Organizador").Trim() == "INSTITUTO AUTARQUICO PROVINCIAL DEL SEGURO"
         ? "IAPSER"
         : ExtractBetween(fullText, "Productor:", "Organizador").Trim();
-        model.States = new List<StateModel>
+        model.States = new List<State>
         {
-            new StateModel { Name = "Recibida en correo", Checked = true },
-            new StateModel { Name = "Cargada en SIAF", Checked = false },
-            new StateModel { Name = "Retencion de fondo de reparo", Checked = false },
-            new StateModel { Name = "Retencion pagada", Checked = false }
+            new State { PolicyNumber = model.Number, Name = "Recibida en correo", Checked = true },
+            new State { PolicyNumber = model.Number, Name = "Cargada en SIAF", Checked = false },
+            new State { PolicyNumber = model.Number, Name = "Retencion de fondo de reparo", Checked = false },
+            new State { PolicyNumber = model.Number, Name = "Retencion pagada", Checked = false }
         };
         return model;
     }
