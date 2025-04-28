@@ -9,7 +9,7 @@ public class PolicyService
         _policyRepository = policyRepository;
     }
     
-    public async Task<List<PolicyModel>> GetAll()
+    public async Task<List<Policy>> GetAll()
     {
         var result = await _policyRepository.GetAll();
         return result;

@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 public interface IPolicyRepository
 {
-    Task<PolicyModel> Insert(PolicyModel policy);
-    Task<PolicyModel?> GetByNumber(string number);
-    Task<List<PolicyModel>> GetAll();
+    Task<Policy> Insert(Policy policy);
+    Task<Policy?> GetByNumber(string number);
+    Task<List<Policy>> GetAll();
 }
 
 public class PolicyRepository : IPolicyRepository
@@ -17,24 +17,24 @@ public class PolicyRepository : IPolicyRepository
         _context = context;
     }
 
-    public async Task<PolicyModel?> GetByNumber(string number)
+    public async Task<Policy?> GetByNumber(string number)
     {
         return await _context.Policies.FirstOrDefaultAsync(p => p.Number == number);
     }
 
-    public async Task<List<PolicyModel>> GetAll()
+    public async Task<List<Policy>> GetAll()
     {
         return await _context.Policies.Include(p => p.States).ToListAsync();
     }
 
-    public async Task<PolicyModel> Insert(PolicyModel policy)
+    public async Task<Policy> Insert(Policy policy)
     {
         var existing = await GetByNumber(policy.Number);
         if (existing != null)
         {
             return null;
         }
-        EntityEntry<PolicyModel> insertedPolicy = await _context.Policies.AddAsync(policy);
+        EntityEntry<Policy> insertedPolicy = await _context.Policies.AddAsync(policy);
         await _context.SaveChangesAsync();
         return insertedPolicy.Entity;
     }

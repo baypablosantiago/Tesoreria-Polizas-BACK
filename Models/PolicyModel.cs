@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-public class PolicyModel
+public class Policy
 {
     [Key]
     public string Number { get; set; }
@@ -20,7 +20,6 @@ public class PolicyModel
 
 public class StateModel
 {
-    public int Id { get; set; }
     [Required]
     public string Name { get; set; }
     [Required]

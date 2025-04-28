@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class TesoContext : DbContext
 {
-    public DbSet<PolicyModel> Policies { get; set; }
+    public DbSet<Policy> Policies { get; set; }
     
     public TesoContext()
     {

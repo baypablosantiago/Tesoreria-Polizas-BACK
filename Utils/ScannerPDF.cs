@@ -8,7 +8,7 @@ using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
 public class ScannerPDF
 {
-    public PolicyModel ReadPdf(Stream stream)
+    public Policy ReadPdf(Stream stream)
     {
         stream.Position = 0;
         string fullText = "";
@@ -38,9 +38,9 @@ public class ScannerPDF
         return text.Substring(startIndex, endIndex - startIndex).Trim();
     }
 
-    private PolicyModel ParsePolicyFromText(string fullText)
+    private Policy ParsePolicyFromText(string fullText)
     {
-        var model = new PolicyModel();
+        var model = new Policy();
         model.Number = ExtractBetween(fullText, "Póliza:", "Instituto").Trim();
         model.Reception = DateTime.Today.ToShortDateString().Trim();
         string fullConcept = ExtractBetween(fullText, "OBJETO DE LA LICITACION O EL CONTRATO", "El presente seguro regira").Trim();;

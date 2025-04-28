@@ -23,10 +23,10 @@ public class EmailScannerService
         scannerPDF = new ScannerPDF();
     }
 
-    public async Task<List<PolicyModel>> GetAsync()
+    public async Task<List<Policy>> GetAsync()
     {
-        List<PolicyModel> models = new List<PolicyModel>();
-        PolicyModel model = new PolicyModel();
+        List<Policy> models = new List<Policy>();
+        Policy model = new Policy();
 
         using (var client = new ImapClient())
         {

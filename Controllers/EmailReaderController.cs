@@ -18,7 +18,7 @@ public class EmailReaderController : ControllerBase
     {
         var result = await _scannerService.GetAsync(); 
 
-        foreach (PolicyModel a in result)
+        foreach (Policy a in result)
         {
             await _policyRepository.Insert(a); 
         }
