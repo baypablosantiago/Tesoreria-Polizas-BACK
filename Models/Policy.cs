@@ -1,28 +1,33 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+[Table("policies")]
 public class Policy
 {
-    [Key]
+    [Key] [MaxLength(50)]
     public string? Number { get; set; }
-    [Required]
+
+
+    [Required] [MaxLength(50)]
     public string? Reception { get; set; }
-    [Required]
+
+
+    [Required] [MaxLength(255)]
     public string? Concept { get; set; }
-    [Required]
+
+
+    [Required] [MaxLength(50)]
     public string? CompanyName { get; set; }
-    [Required]
+
+
+    [Required] [MaxLength(50)]
     public string? CompanyCuil { get; set; }
-    [Required]
+
+
+    [Required] [MaxLength(50)]
     public string? Insurer { get; set; }
+    
+
     [Required]
     public List<State>? States { get; set; }
-}
-
-[Table("policy_states")]
-public class State
-{
-    public string? PolicyNumber { get; set; }
-    public string? Name { get; set; }
-    public bool Checked { get; set; }
 }

@@ -33,14 +33,14 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseCors("AllowLocalhost4200"); //cors temario
-// Configurar Swagger en entorno de desarrollo
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
-        options.RoutePrefix = string.Empty; // Hace que Swagger esté disponible en "/"
+        options.RoutePrefix = string.Empty; // hace que Swagger esté disponible en "/"
     });
 }
 
