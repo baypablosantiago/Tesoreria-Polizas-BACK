@@ -12,7 +12,7 @@ public class Policy
     public string? Reception { get; set; }
 
 
-    [Required] [MaxLength(255)]
+    [Required] [MaxLength(500)]
     public string? Concept { get; set; }
 
 
