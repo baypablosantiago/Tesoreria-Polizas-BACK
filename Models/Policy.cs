@@ -30,4 +30,8 @@ public class Policy
 
     [Required]
     public List<State>? States { get; set; }
+
+
+    [Required]
+    public bool? Endorsements { get; set; }
 }

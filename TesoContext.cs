@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 public class TesoContext : DbContext
 {
     public DbSet<Policy> Policies { get; set; }
+    public DbSet<Endorsement> Endorsements { get; set; }
 
     public TesoContext()
     {

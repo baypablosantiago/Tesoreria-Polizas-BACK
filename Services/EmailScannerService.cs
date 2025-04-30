@@ -3,11 +3,12 @@ using MailKit.Net.Imap;
 using MailKit.Search;
 using MimeKit;
 using DotNetEnv;
+using Sprache;
 
 public class EmailScannerService
 {
     private readonly string host;
-    private readonly int port = 993;
+    private readonly int port;
     private readonly string username;
     private readonly string password;
     ScannerPDF scannerPDF;
@@ -18,6 +19,7 @@ public class EmailScannerService
         Env.Load();
         _policyRepository = policyRepository;
         host = Environment.GetEnvironmentVariable("HOST") ?? throw new InvalidOperationException("Error en el .env");
+        port = Convert.ToInt16(Environment.GetEnvironmentVariable("PORT")); 
         password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
         username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
         scannerPDF = new ScannerPDF();
@@ -25,8 +27,10 @@ public class EmailScannerService
 
     public async Task<List<Policy>> GetAsync()
     {
-        List<Policy> models = new List<Policy>();
-        Policy model = new Policy();
+        List<Policy> policies = new List<Policy>();
+        List<Endorsement> endorsements = new List<Endorsement>(); 
+        Policy policyModel = new Policy();
+        Endorsement endorsementModel = new Endorsement();
 
         using (var client = new ImapClient())
         {
@@ -46,14 +50,26 @@ public class EmailScannerService
                 {
                     if (attachment is MimePart part && part.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
                     {
-                        using (var memoryStream = new MemoryStream())
+                        if (part.FileName.Contains("P"))
                         {
-                            part.Content.DecodeTo(memoryStream);
-                            model = scannerPDF.ReadPdf(memoryStream);
-                            var exists = await _policyRepository.GetByNumber(model.Number);
-                            if (exists == null)
+                            using (var memoryStream = new MemoryStream())
                             {
-                                models.Add(model);
+                                part.Content.DecodeTo(memoryStream);
+                                policyModel = scannerPDF.ReadPdfToPolicy(memoryStream);
+                                var exists = await _policyRepository.GetByNumber(policyModel.Number);
+                                if (exists == null)
+                                {
+                                    policies.Add(policyModel);
+                                }
+                            }
+                        }
+                        else if (part.FileName.Contains("E"))
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                part.Content.DecodeTo(memoryStream);
+                                endorsementModel = scannerPDF.ReadPdfToEndorsement(memoryStream);
+                                endorsements.Add(endorsementModel);
                             }
                         }
                     }
