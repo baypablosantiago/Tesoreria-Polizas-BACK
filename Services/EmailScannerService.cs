@@ -28,9 +28,7 @@ public class EmailScannerService
     public async Task<List<Policy>> GetAsync()
     {
         List<Policy> policies = new List<Policy>();
-        List<Endorsement> endorsements = new List<Endorsement>(); 
         Policy policyModel = new Policy();
-        Endorsement endorsementModel = new Endorsement();
 
         using (var client = new ImapClient())
         {
@@ -63,21 +61,16 @@ public class EmailScannerService
                                 }
                             }
                         }
-                        else if (part.FileName.Contains("E"))
-                        {
-                            using (var memoryStream = new MemoryStream())
-                            {
-                                part.Content.DecodeTo(memoryStream);
-                                endorsementModel = scannerPDF.ReadPdfToEndorsement(memoryStream);
-                                endorsements.Add(endorsementModel);
-                            }
-                        }
+                        // else if (part.FileName.Contains("E"))
+                        // {
+                           
+                        // }
                     }
                 }
                 inbox.AddFlags(uid, MessageFlags.Seen, true);
             }
             client.Disconnect(true);
         }
-        return models;
+        return policies;
     }
 }

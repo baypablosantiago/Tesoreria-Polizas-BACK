@@ -6,21 +6,24 @@ public class EmailReaderController : ControllerBase
 {
     private readonly IPolicyRepository _policyRepository;
     private readonly EmailScannerService _scannerService;
+    private readonly EmailRetriverService _retriverService;
 
-    public EmailReaderController(EmailScannerService scannerService, IPolicyRepository policyRepository)
+    public EmailReaderController(EmailScannerService scannerService, IPolicyRepository policyRepository, EmailRetriverService retriverService)
     {
         _scannerService = scannerService;
         _policyRepository = policyRepository;
+        _retriverService = retriverService;
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var result = await _scannerService.GetAsync(); 
+        _retriverService.GetAndDownload();
+        var result = await _scannerService.GetAsync();
 
         foreach (Policy a in result)
         {
-            await _policyRepository.Insert(a); 
+            await _policyRepository.Insert(a);
         }
 
         return Ok(result);
