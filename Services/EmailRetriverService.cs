@@ -30,7 +30,7 @@ public class EmailRetriverService
 
         using (var client = new ImapClient())
         {
-            client.Connect(host, port, true);
+            client.Connect(host, imapport, true);
             client.Authenticate(username, password);
 
             var inbox = client.Inbox;
