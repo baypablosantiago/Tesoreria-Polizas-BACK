@@ -7,7 +7,7 @@ using DotNetEnv;
 public class EmailRetriverService
 {
     private readonly string host;
-    private readonly int port;
+    private readonly int imapport;
     private readonly string username;
     private readonly string password;
 
@@ -15,7 +15,7 @@ public class EmailRetriverService
     {
         Env.Load();
         host = Environment.GetEnvironmentVariable("HOST") ?? throw new InvalidOperationException("Error en el .env");
-        port = Convert.ToInt16(Environment.GetEnvironmentVariable("PORT")); 
+        imapport = Convert.ToInt16(Environment.GetEnvironmentVariable("IMAP_PORT")); 
         password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
         username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
     }
