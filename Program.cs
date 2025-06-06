@@ -4,16 +4,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => //el temita de los cors
 {
-    options.AddPolicy("AllowLocalhost4200", policy =>
+    options.AddPolicy("Warning-All", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("*")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
 
-builder.Services.AddDbContext<TesoContext>(options 
-=> options.UseMySQL(builder.Configuration.GetConnectionString(name:"XAMPP")));
+builder.Services.AddDbContext<TesoContext>(options
+=> options.UseNpgsql(builder.Configuration.GetConnectionString("RenderPOSTGRES")));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // para que funcione swagger
@@ -32,7 +32,17 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-app.UseCors("AllowLocalhost4200"); //cors temario
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<TesoContext>();
+
+    // Ejecuta un TRUNCATE al iniciar la appweb, para poder hacer pruebas
+    await context.Database.ExecuteSqlRawAsync(@"
+        TRUNCATE TABLE ""endorsements"", ""policies"", ""policy_states"" RESTART IDENTITY CASCADE;
+    ");
+}
+
+app.UseCors("Warning-All"); //el temita de los cors 2
 
 if (app.Environment.IsDevelopment())
 {
@@ -46,30 +56,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapControllers(); // Mapea? los controladores
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
