@@ -6,7 +6,7 @@ builder.Services.AddCors(options => //el temita de los cors
 {
     options.AddPolicy("Warning-All", policy =>
     {
-        policy.WithOrigins("*")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
