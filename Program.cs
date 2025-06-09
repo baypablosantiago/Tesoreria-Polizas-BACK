@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => //el temita de los cors
 {
-    options.AddPolicy("Warning-All", policy =>
+    options.AddPolicy("AllOrigins", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyHeader()
@@ -42,7 +42,7 @@ using (var scope = app.Services.CreateScope())
     ");
 }
 
-app.UseCors("Warning-All"); //el temita de los cors 2
+app.UseCors("AllOrigins"); //el temita de los cors 2
 
 if (app.Environment.IsDevelopment())
 {
