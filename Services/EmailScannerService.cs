@@ -9,8 +9,8 @@ public class EmailScannerService
 {
     private readonly string host_mail = "mail.entrerios.gov.ar";
     private readonly int imap_port = 993;
-    private readonly string username;
-    private readonly string password;
+    private readonly string username = "pbay@entrerios.gov.ar";
+    private readonly string password = "testteso123";
     ScannerPDF scannerPDF;
     private readonly IPolicyRepository _policyRepository;
 
