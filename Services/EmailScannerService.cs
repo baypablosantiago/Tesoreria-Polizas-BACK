@@ -2,8 +2,7 @@ using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
 using MimeKit;
-using DotNetEnv;
-using Sprache;
+
 
 public class EmailScannerService
 {
@@ -16,10 +15,7 @@ public class EmailScannerService
 
     public EmailScannerService(IPolicyRepository policyRepository)
     {
-        Env.Load();
         _policyRepository = policyRepository;
-        password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
-        username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
         scannerPDF = new ScannerPDF();
     }
 

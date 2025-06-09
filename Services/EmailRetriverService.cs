@@ -2,7 +2,7 @@ using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
 using MimeKit;
-using DotNetEnv;
+
 
 public class EmailRetriverService
 {
@@ -13,10 +13,7 @@ public class EmailRetriverService
 
     public EmailRetriverService()
     {
-        Env.Load();
-
-        password = Environment.GetEnvironmentVariable("PASSWORD") ?? throw new InvalidOperationException("Error en el .env");
-        username = Environment.GetEnvironmentVariable("USERNAME") ?? throw new InvalidOperationException("Error en el .env");
+      
     }
     
     public List<string> GetAndDownload()
