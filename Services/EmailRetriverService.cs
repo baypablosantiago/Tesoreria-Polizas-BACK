@@ -6,10 +6,10 @@ using MimeKit;
 
 public class EmailRetriverService
 {
-    private readonly string host_mail = "mail.entrerios.gov.ar";
+    private readonly string host_mail = "USE THE .ENV FILE";
     private readonly int imap_port = 993;
-    private readonly string username = "pbay@entrerios.gov.ar";
-    private readonly string password = "testteso123";
+    private readonly string username = "USE THE .ENV FILE";
+    private readonly string password = "USE THE .ENV FILE";
 
     public EmailRetriverService()
     {
